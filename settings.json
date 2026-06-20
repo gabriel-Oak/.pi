@@ -1,0 +1,23 @@
+{
+  "packages": [
+    "npm:pi-llama-cpp",
+    "npm:@tintinweb/pi-subagents",
+    "npm:pi-mcp-adapter"
+  ],
+  "retry": {
+    "enabled": true,
+    "maxRetries": 20,
+    "baseDelayMs": 60000,
+    "provider": {
+      "timeoutMs": 3600000,
+      "maxRetries": 20,
+      "maxRetryDelayMs": 120000
+    }
+  },
+  "llamaServerUrl": "http://100.108.204.127:11434",
+  "lastChangelogVersion": "0.79.1",
+  "defaultProvider": "llama-server=http://100.108.204.127:11434",
+  "defaultModel": "qwen3.6-35b-mtp",
+  "defaultThinkingLevel": "high",
+  "hideThinkingBlock": true
+}
