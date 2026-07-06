@@ -1,0 +1,19 @@
+{
+  "providers": {
+    "ollama": {
+      "baseUrl": "http://100.108.204.127:11434",
+      "api": "openai-completions",
+      "apiKey": "llama",
+      "models": [
+        {
+          "id": "gemma4-e4b-uncensored",
+          "name": "Gemma 4 E4B Uncensored (Summary)",
+          "reasoning": true,
+          "input": ["text"],
+          "contextWindow": 100000,
+          "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
+        }
+      ]
+    }
+  }
+}

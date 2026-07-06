@@ -2,7 +2,8 @@
   "packages": [
     "npm:pi-llama-cpp",
     "npm:@tintinweb/pi-subagents",
-    "npm:pi-mcp-adapter"
+    "npm:pi-mcp-adapter",
+    "npm:pi-web-access"
   ],
   "retry": {
     "enabled": true,
