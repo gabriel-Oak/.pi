@@ -18,10 +18,10 @@
     }
   },
   "llamaServerUrl": "http://100.108.204.127:11434",
-  "lastChangelogVersion": "0.80.10",
+  "lastChangelogVersion": "0.81.1",
   "defaultProvider": "llama-server=http://100.108.204.127:11434",
-  "defaultModel": "ornith-35b-mtp-mini",
+  "defaultModel": "ornith-35b-mtp-quality",
   "defaultThinkingLevel": "xhigh",
-  "hideThinkingBlock": true,
+  "hideThinkingBlock": false,
   "theme": "dark"
 }
