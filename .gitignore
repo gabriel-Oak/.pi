@@ -10,6 +10,9 @@ cache
 # Session logs (can grow large)
 sessions/
 
+# MCP OAuth tokens (sensitive)
+mcp-oauth/
+
 # Node modules
 npm/node_modules/
 bin

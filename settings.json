@@ -5,7 +5,8 @@
     "npm:pi-mcp-adapter",
     "npm:pi-web-access",
     "npm:pi-caveman",
-    "npm:context-mode"
+    "npm:context-mode",
+    "npm:@isr4el-silv4/loop-guard"
   ],
   "retry": {
     "enabled": true,

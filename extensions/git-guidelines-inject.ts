@@ -4,42 +4,47 @@ import { isToolCallEventType } from "@earendil-works/pi-coding-agent";
 const SKILL_NAME = "git-guidelines";
 
 export default function (pi: ExtensionAPI) {
-  // Instrui o agente a carregar a skill no início de cada agent run
-  pi.on("before_agent_start", async (event) => {
-    event.systemPrompt +=
-      `\n\n# Git Guidelines\n` +
-      `Before performing ANY git operation, you MUST run \`/skill:${SKILL_NAME}\` to load the git guidelines and follow them.\n` +
-      `Rules: never commit .gitignore files, never force push without approval, never bypass hooks, always ask before commit/push/pull.`;
-  });
-
   pi.on("tool_call", async (event, ctx) => {
     let isGit = false;
 
-    if (isToolCallEventType("bash", event)) {
-      const cmd = event.input.command || "";
-      isGit = /(^|\s)git\s+(status|log|commit|push|pull|branch|checkout|merge|rebase|add|diff|clone|fetch|remote|stash|reset|revert|init|config)\b/.test(cmd);
-    } else if (isToolCallEventType("ctx_execute", event)) {
-      const code = event.input.code || "";
-      isGit = /(^|\s)git\s+(status|log|commit|push|pull|branch|checkout|merge|rebase|add|diff|clone|fetch|remote|stash|reset|revert|init|config)\b/.test(code);
+    if (isToolCallEventType("bash", event) || isToolCallEventType("ctx_execute", event)) {
+      const input = isToolCallEventType("bash", event) 
+        ? (event.input.command || "")
+        : (event.input.code || "");
+      isGit = /(^|\s)git\s+(status|log|commit|push|pull|branch|checkout|merge|rebase|add|diff|clone|fetch|remote|stash|reset|revert|init|config)\b/.test(input);
     }
 
     if (!isGit) return;
 
-    // Verifica se já houve alguma tentativa de git bloqueada anteriormente
-    // (verifica entry custom no session)
+    // Verifica se a skill git-guidelines está carregada no contexto
+    // Busca no system prompt se a skill foi injetada (via /skill:git-guidelines)
+    try {
+      const systemPrompt = ctx.getSystemPrompt();
+      const hasSkillInPrompt = systemPrompt.includes(SKILL_NAME) && 
+                               systemPrompt.includes("Git Guidelines");
+      
+      if (hasSkillInPrompt) {
+        // Skill carregada no system prompt, permite git
+        return;
+      }
+    } catch {
+      // Ignora se não conseguir ler system prompt
+    }
+
+    // Verifica se já houve git bloqueado antes (fallback)
     try {
       const entries = ctx.sessionManager.getEntries();
       const hasGitBlocked = entries.some(
         (e: any) => e.type === "custom" && e.customType === "git-blocked"
       );
       if (hasGitBlocked) {
-        return; // Já bloqueou antes, permite git agora
+        return; // Já bloqueou antes, permite git
       }
     } catch {
-      return;
+      // Ignora
     }
 
-    // Primeira vez — marca e bloqueia
+    // Primeira vez — marca como bloqueada e bloqueia
     try {
       pi.appendEntry("git-blocked", {});
     } catch {
